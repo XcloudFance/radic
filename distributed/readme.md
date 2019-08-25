@@ -1,15 +1,15 @@
 # 分布式索引
 ## 数据切分方式
 ### 水平切分
-![avatar](https://github.com/Orisun/radic/img/hslice.png)
+![avatar](https://github.com/Orisun/radic/blob/master/img/hslice.png)
 优势：遍历单条倒排链快。<br>
 劣势：正排冗余存储在多台机器上。
 ### 垂直切分
-![avatar](https://github.com/Orisun/radic/img/vslice.png)
+![avatar](https://github.com/Orisun/radic/blob/master/img/vslice.png)
 优势：某一台宕机后对搜索结果影响不大；每一台的搜索行为与单机索引时完全相同。<br>
 劣势：查询速度由最慢（即链最长）的那台机器决定。
 ## 分布式集群
-![avatar](https://github.com/Orisun/radic/img/cluster.png)
+![avatar](https://github.com/Orisun/radic/blob/master/img/cluster.png)
 - 由多个Group垂直切分整个倒排索引，每个Group内有多台Server做冗余备份。
 - Server之间使用ØMQ通信，使用socket池以提高性能。
 - Group内部使用最小并发度算法做负载均衡。
