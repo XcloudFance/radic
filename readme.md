@@ -1,6 +1,6 @@
 go语言实现搜索引擎的索引部分，包括：<br>
-[正排索引](forward_index/readme.md)<br>
 [倒排索引](inverted_index/readme.md)<br>
+[正排索引](forward_index/readme.md)<br>
 [分布式索引](distributed/readme.md)<br>
 
 ### 使用举例
@@ -71,16 +71,18 @@ func main() {
 	kw4 := &types.Keyword{Field: "field", Word: "编程"}
 	kw5 := &types.Keyword{Field: "title", Word: "go"}
 	docInfo1 := types.DocInfo{
-		DocId:     uint32(book1.Id),
-		Keyword:   []*types.Keyword{kw1, kw2, kw3},
-		RankScore: book1.Price,
-		Entry:     book1.Serialize(),
+		DocId:            uint32(book1.Id),
+		Keyword:          []*types.Keyword{kw1, kw2, kw3},
+		RankScore:        book1.Price,
+		Entry:            book1.Serialize(),
+		CompositeFeature: 1, //转成二进制，倒数第1位上是1
 	}
 	docInfo2 := types.DocInfo{
-		DocId:     uint32(book2.Id),
-		Keyword:   []*types.Keyword{kw4, kw5},
-		RankScore: book2.Price,
-		Entry:     book2.Serialize(),
+		DocId:            uint32(book2.Id),
+		Keyword:          []*types.Keyword{kw4, kw5},
+		RankScore:        book2.Price,
+		Entry:            book2.Serialize(),
+		CompositeFeature: 3, //转成二进制，倒数第1位和第2位上都是1
 	}
 	engine.IndexDoc(docInfo1) //往索引上添加数据是异步执行的
 	engine.IndexDoc(docInfo2)
@@ -96,6 +98,8 @@ func main() {
 		Should:        nil,
 		Not:           nil,
 		OutputOffset:  0,
+		OnFlag:        1, //要求倒数第1位上是1
+		OffFlag:       4, //要求倒数第3位上不能是1
 		Orderless:     false,
 		CountDocsOnly: false,
 		Timeout:       200,
@@ -134,7 +138,6 @@ func main() {
 		return nil
 	})
 }
-
 ```
 
 更多API参见[radic.go](radic.go)
